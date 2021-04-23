@@ -38,12 +38,10 @@ export class UserEditComponent implements OnInit {
     console.log(this.UserForm.value);
     if(this.id!==null){
       this.userService.updateUser(this.id,this.UserForm.value).subscribe(data=>{
-        console.log('Actulizado');
       });
 
     }else{
       this.userService.save(this.UserForm.value).subscribe(result => {
-        console.log('Creado');
       }, error => console.error(error));
     }
 
