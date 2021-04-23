@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CarService } from '../shared/car/car.service';
-import { GiphyService } from '../shared/giphy/giphy.service';
+import { CarService } from '../../services/shared/car/car.service';
+import { GiphyService } from '../../services/shared/giphy/giphy.service';
 import { NgForm } from '@angular/forms';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-car-edit',
@@ -12,13 +13,14 @@ import { NgForm } from '@angular/forms';
 })
 export class CarEditComponent implements OnInit, OnDestroy {
   car: any = {};
-
+  error=null
   sub: Subscription;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private carService: CarService,
-              private giphyService: GiphyService) {
+              private giphyService: GiphyService,
+              private userService:UserService) {
   }
 
   ngOnInit() {
@@ -48,9 +50,17 @@ export class CarEditComponent implements OnInit, OnDestroy {
   }
 
   save(form: NgForm) {
-    this.carService.save(form).subscribe(result => {
-      this.gotoList();
-    }, error => console.error(error));
+      this.userService.getUser(form['ownerDni']).subscribe(data=>{
+        form['ownerDni']=data['dni'];
+        console.log(form);
+        this.carService.save(form).subscribe(result => {
+          this.gotoList();
+        }, error => console.error(error));
+       },error=>{
+         console.log(error);
+         this.error="El usuario no  con ese id no existe";
+       });
+
   }
 
   remove(href) {
@@ -58,5 +68,6 @@ export class CarEditComponent implements OnInit, OnDestroy {
       this.gotoList();
     }, error => console.error(error));
   }
-}
 
+
+}

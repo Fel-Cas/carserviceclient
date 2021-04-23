@@ -1,4 +1,5 @@
 <mat-card>
+    <h3 >La cédula del propietarioes: <strong>{{car.ownerDni}}</strong> <p *ngIf="car.ownerDni===null">Este auto no tiene propietario</p> </h3>
     <form #carForm="ngForm" (ngSubmit)="save(carForm.value)">
       <mat-card-header>
         <mat-card-title><h2>{{car.name ? 'Edit' : 'Add'}} Car</h2></mat-card-title>
@@ -9,6 +10,16 @@
           <input matInput placeholder="Car Name" [(ngModel)]="car.name"
                  required name="name" #name>
         </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input matInput type="number" placeholder="Id Owner" ngModel
+                 name="ownerDni" #name>
+
+        </mat-form-field>
+
+        <p *ngIf="error!=null">
+          <span>{{error}}</span>
+        </p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-raised-button color="primary" type="submit"

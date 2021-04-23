@@ -1,0 +1,46 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-lg-8 offset-lg-2">
+      <div class="card">
+        <div class="card-body text-center">
+          <span>Listado de Propietarios</span>
+          <button class="btn btn-success float-end" routerLink="/user-add">ADD</button>
+          <form [formGroup]="userForm" (ngSubmit)="removeUsers()">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Cédula</th>
+                <th scope="col">Profesión</th>
+                <th scope="col">Nombre</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+              <tbody>
+                <tr *ngFor="let user of users" >
+                  <th scope="row"> <input type="checkbox" value="{{user._links.self.href}}" (change)="onCheckboxChange($event)">{{user._links.self.href}}</th>
+                  <td>{{user.dni}}</td>
+                  <td>{{user.profession}}</td>
+                  <td>{{user.name}}</td>
+                  <td><i [routerLink]="['/user-edit',user._links.self.href]" class="fas fa-edit text-primary"></i>
+                    <i  class="fas fa-trash text-danger" (click)='deleteUser(user._links.owner.href)' ></i>
+                  </td>
+                </tr>
+              </tbody>
+
+          </table>
+          <button type="submit" class="btn btn-success btn-lg float-end">Eliminar</button>
+          <button routerLink="/cars-list" class="btn btn-secondary btn-lg float-start">Cars</button>
+        </form>
+        <div class="text-danger" *ngIf="message!==null">
+          <span>{{message}}</span>
+        </div>
+
+        <div class="text-danger" *ngIf="datos==0">
+          <span>No hay usuarios registrados</span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
