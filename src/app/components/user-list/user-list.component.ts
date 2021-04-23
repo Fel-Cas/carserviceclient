@@ -2,7 +2,6 @@ import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { Router } from '@angular/router';
 import { ObjectUnsubscribedError, Observable } from 'rxjs';
-import { User } from 'src/app/models/user';
 import { CarService } from 'src/app/services/shared/car/car.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -27,6 +26,9 @@ export class UserListComponent implements OnInit {
     this.getAllUsers();
 
 }
+  /***
+   * Obtenemos todos los usuarios para que sean mostrados en el HTML
+  */
   getAllUsers(){
     this.userService.getUsers().subscribe(data=>{
       this.users=data._embedded.owners;
@@ -36,7 +38,9 @@ export class UserListComponent implements OnInit {
       console.log(error);
     });
   }
-
+  /****
+   * Este método es utilizado para eliminar un usuario es especifico.
+   */
   deleteUser(url){
     let partes=url.split('/');
     this.eliminarRelacion([partes[partes.length-1]]);
@@ -45,6 +49,9 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['/car-list']);
   }
 
+  /**
+   * Obtenemos los ids desde el href
+   */
   obtenerId(lista:Array<any>){
       let longitud=lista.length;
       for(let i=0;i<longitud;i++){
@@ -54,13 +61,14 @@ export class UserListComponent implements OnInit {
         lista[i]._links.self.href=partes[partes.length-1];
       }
   }
-
+  /***
+   * Elimina varios Usuarios
+   */
   removeUsers(){
     this.ids=this.userForm.value.checkArray;
     if(this.ids.length!==0){
       console.log(this.ids);
       for(let i of this.ids){
-        console.log(i);
         this.eliminarRelacion(i);
         this.userService.deleteById(i).subscribe(data=>{
 
@@ -71,12 +79,14 @@ export class UserListComponent implements OnInit {
       }
       this.router.navigate(['/car-list']);
     }else{
-      console.log('Array vacio');
       this.message="Debe seleccinar por lo menos un propietario a borrar.";
     }
 
   }
-
+  /**
+   *Método que permite que el checkbox funcione.
+   *
+   */
   onCheckboxChange(e) {
     const checkArray: FormArray = this.userForm.get('checkArray') as FormArray;
 
@@ -93,6 +103,9 @@ export class UserListComponent implements OnInit {
       });
     }
   }
+  /**
+   * Método que elimina la relación entre un propietario y un auto.
+   */
   eliminarRelacion(id){
       console.log(id);
       this.userService.getUser(id).subscribe(data=>{

@@ -30,6 +30,10 @@ export class UserEditComponent implements OnInit {
   ngOnInit() {
     this.esEditar();
   }
+
+  /**
+   * Método que se utiliza para crear los propietarios.
+   */
   addUser(){
     console.log(this.UserForm.value);
     if(this.id!==null){
@@ -45,6 +49,10 @@ export class UserEditComponent implements OnInit {
 
     this.router.navigate(['/user-list']);
   }
+  /**
+   * Método que verifica a través del la url si se va a editar un propietario o
+   * solo se va a crear uno nuevo.
+   */
   esEditar(){
     if(this.id!==null){
       this.titulo="Editar Producto";
